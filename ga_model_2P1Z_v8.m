@@ -36,7 +36,7 @@ function varargout=ga_model_2P1Z_v8(Nsupply,C_nut,varargin)
 
 
 default_parameters={...
-'umax_small',1.9872,'umax_big',2.7648,'gmax1',1.1126,'gmax2',1.4226,...% maximum growth and grazing rates (d^{-1}) (Baklouti et al., 2021)
+'umax_small',1.9872,'umax_big',2.7648,'gmax1',1.1126,'gmax2',1.5226,...% maximum growth and grazing rates (d^{-1}) (Baklouti et al., 2021)
 'cChl_small',200,'cChl_big',50,...								% C:Chl ratios for Psmall and Pbig (only used to calculate Chl) (Lazzari et al., 2012)
 'kP_small',13.3,...											% half-saturation constant for Psmall on PO4 (mmolC m^{-3}) (Pulido-Villena et al., 2021) )
 'kP_big',15.3,...												% half-saturation constant for Pbig on PO4 (mmolC m^{-3}) (Pulido-Villena et al., 2021)
@@ -137,10 +137,10 @@ for t=2:nb_time
     Z(t)=Z(t-1)+G1(t)*arg.dt+G2(t)*arg.dt-excretion_Z(t)*arg.dt-death_Z(t)*arg.dt; Z(Z<=0)=0;
     
     % export 
-    Export(t) =p_fec(t)*arg.dt+death_Z(t)*arg.dt; 
+    Export(t) = Export(t-1)+p_fec(t)*arg.dt+death_Z(t)*arg.dt; 
     
     % Budget
-    Budget(t) = PO4(t)*arg.dt-Export(t)*arg.dt; %Budget(Budget<=0)=0;
+    Budget(t) = Budget(t-1)+PO4(t)*arg.dt-Export(t)*arg.dt; %Budget(Budget<=0)=0;
 
 end
 
@@ -154,12 +154,12 @@ end
 units=struct('time','days','Nsupply','mmolC m^{-3} d^{-1}',...
 	'P_small','mmolC m^{-3}','P_big','mmolC m^{-3}','Z_small','mmolC m^{-3}','Z_big','mmolC m^{-3}',...
 	'PO4','mmolC m^{-3}','Chl','mg m^{-3}','PP','gC m^{-3}/yr',...
-	'u_small','d^{-1}','u_big','d^{-1}','g_small','d^{-1}','g_big','d^{-1}', 'PP_small', 'gC m^{-3}/yr', 'PP_big','gC m^{-3}/yr', 'Export', 'mmolC m^{-3} d^{-1}','Budget','mmolC m^{-3} d^{-1}','death_Z', 'mmolC m^{-3} d^{-1}', 'p_fec','mmolC m^{-3} d^{-1}');
+	'u_small','d^{-1}','u_big','d^{-1}','g_small','d^{-1}','g_big','d^{-1}', 'PP_small', 'gC m^{-3}/yr', 'PP_big','gC m^{-3}/yr', 'Export', 'mmolC m^{-3} d^{-1}','Budget','mmolC m^{-3} d^{-1}');
 
 output=struct('units',units,'time',time,'Nsupply',Nsupply,...
 	'P_small',P_small,'P_big',P_big,'Z', Z,'PO4',PO4,...
 	'Chl',P_small*12/arg.cChl_small+P_big*12./arg.cChl_big,'PP',(PP_big+PP_small)*1E-3*12*365.25,...
-	'u_small',u_small,'u_big',u_big,'g',g, 'PP_small', PP_small,'PP_big', PP_big, 'Export', Export,'Budget', Budget,'death_Z',death_Z, 'p_fec', p_fec, 'attributs',struct('arg',arg));
+	'u_small',u_small,'u_big',u_big,'g',g, 'PP_small', PP_small,'PP_big', PP_big, 'Export', Export,'Budget', Budget,'attributs',struct('arg',arg));
 varargout={output}; varargout=varargout(1:nargout);
 
 
