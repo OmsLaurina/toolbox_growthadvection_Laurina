@@ -1,4 +1,4 @@
-function varargout=ga_model_2P2Z_v7(Nsupply,C_nut,varargin)
+function varargout=ga_model_2P2Z_v7(Nsupply,C_nut,Pini1, Pini2,varargin)
 %% GA_MODEL_2P2Z_FROMNSUPPLY: plankton model used to model zooplankton hotspots
 % Default parameters are based on Messié & Chavez (2017).
 % 
@@ -36,17 +36,17 @@ function varargout=ga_model_2P2Z_v7(Nsupply,C_nut,varargin)
 
 
 default_parameters={...
-'umax_small',1.9872,'umax_big',2.7648,'gmax_small',1.4226,'gmax_big',1.4256,...% maximum growth and grazing rates (d^{-1}) (Baklouti et al., 2021)
+'umax_small',1.9872,'umax_big',2.7648,'gmax_small',1.4226,'gmax_big',1.1120,...% maximum growth and grazing rates (d^{-1}) (Baklouti et al., 2021)
 'cChl_small',200,'cChl_big',50,...								% C:Chl ratios for Psmall and Pbig (only used to calculate Chl) (Lazzari et al., 2012)
 'kP_small',13.3,...											% half-saturation constant for Psmall on PO4 (mmolC m^{-3}) (Pulido-Villena et al., 2021) )
-'kP_big',13.3,...												% half-saturation constant for Pbig on PO4 (mmolC m^{-3}) (Pulido-Villena et al., 2021)
+'kP_big',15.3,...												% half-saturation constant for Pbig on PO4 (mmolC m^{-3}) (Pulido-Villena et al., 2021)
 'kG_small',5,...											% half-saturation constant for Zsmall on Psmall (mmolC m^{-3}) (Auger et al., 2011)
 'kG_big',5,...										% half-saturation constant for Zbig on Pbig and Zsmall (mmolC m^{-3}) (Auger et al., 2011)
 'mP',0,...														% Pbig mortality rate (default 0 ie no Pbig sinking) (d^{-1}) (Auger et al., 2011)
 'mZ',0.005,...											% Zbig quadratic mortality rate (mmolC^{-1} m^{3} d^{-1})
 'eZ',0.1,...													% zoo excretion fraction (Zsmall and Zbig) (d^{-1}) (Baklouti et al., 2021)
 'epsilon',0.75 ,...												% fraction of Zbig excretion that is available as regenerated PO4rients
-'P_small_ini',0.8,'P_big_ini',0.1,'Z_small_ini',0.3,'Z_big_ini',0.4};	% initial biomass (mmolC m^{-3}) (In situ for P_small_ini with method from Marrec et al., 2018 and Tzortzis et al., 2021 & further)
+'P_small_ini',Pini1,'P_big_ini',Pini2,'Z_small_ini',0.3,'Z_big_ini',0.3};	% initial biomass (mmolC m^{-3}) (In situ for P_small_ini with method from Marrec et al., 2018 and Tzortzis et al., 2021 & further)
 
 [arg,flag]=ga_read_varargin(varargin,[{'nbdays_advec',20,'dt',0.2,'time',[],'upw_duration',1},default_parameters],{'plot'});
 if length(Nsupply)>1 && isempty(arg.time), error('Give time if Nsupply is a vector'), end
@@ -190,11 +190,11 @@ if flag.plot
 
     %Temporal evolution
 	figure, hold on
-	plot(output.time,output.P_small,'LineWidth',2)
-	plot(output.time,output.P_big,'LineWidth',2)
-	plot(output.time,output.Z_small,'LineWidth',2)
-	plot(output.time,output.Z_big,'LineWidth',2)
-    plot(output.time,output.PO4,'LineWidth',2)
+	plot(output.time,output.P_small,'LineWidth',2, 'Color','g')
+	plot(output.time,output.P_big,'LineWidth',2,'Color', '#77AC30')
+	plot(output.time,output.Z_small,'LineWidth',2,'Color','#4DBEEE')
+	plot(output.time,output.Z_big,'LineWidth',2, 'Color','b')
+    plot(output.time,output.PO4,'LineWidth',2, 'Color','m')
 	ylabel(output.units.P_small)
 	if min(output.time)>datenum(1900,1,1), datetick('x','keeplimits'), xlabel('Time')
 	else, xlabel('Time (days)')
@@ -203,14 +203,6 @@ if flag.plot
 	title('Model output (plankon concentration over time)')
     xlim([min(output.time) max(output.time)]);
     ylim([0 1]);
-
-    %Temporal evolution
-	figure, hold on
-	plot(output.time,output.u_small,'LineWidth',2)
-	plot(output.time,output.u_big,'LineWidth',2)
-	legend({'P\_small','P\_big'})
-	title('Model output (plankon concentration over time)')
-    xlim([min(output.time) max(output.time)]);
 
     %Monod equation
     figure, hold on
