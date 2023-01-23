@@ -16,28 +16,28 @@ disp('test_ini_map : ...');
 %run('relation_SST_T_tsg.m');
 %%
 
-%initial sst matrix
-lon_shape_iter = (lon_MUR <= 7 & lon_MUR >= 0);
-lat_shape_iter = (lat_MUR <= 40 & lat_MUR >= 36);
-lon_shaped=[];
-lat_shaped=[];
-for i = 1:length(lon_shape_iter)
-    if lon_shape_iter(i)>=0
-        lon_shaped(length(lon_shaped)+1)=i;
-    end
-end
-for i = 1:length(lat_shape_iter)
-    if lat_shape_iter(i)>=0
-        lat_shaped(length(lat_shaped)+1)=i;
-    end
-end
-sst_shaped = sst_MUR(lon_shaped,lat_shaped,120);
-mat_sst = sst_shaped;
-
-xvalue = min(lon):0.01:max(lon);
-yvalue = min(lat):0.01:max(lat);
-[X,Y] = meshgrid(xvalue, yvalue);
-point_1 = [X(:) Y(:)];
+% %initial sst matrix
+% lon_shape_iter = (lon_MUR <= 7 & lon_MUR >= 0);
+% lat_shape_iter = (lat_MUR <= 40 & lat_MUR >= 36);
+% lon_shaped=[];
+% lat_shaped=[];
+% for i = 1:length(lon_shape_iter)
+%     if lon_shape_iter(i)>=0
+%         lon_shaped(length(lon_shaped)+1)=i;
+%     end
+% end
+% for i = 1:length(lat_shape_iter)
+%     if lat_shape_iter(i)>=0
+%         lat_shaped(length(lat_shaped)+1)=i;
+%     end
+% end
+% sst_shaped = sst_MUR(lon_shaped,lat_shaped,120);
+% mat_sst = sst_shaped;
+% 
+% xvalue = min(lon):0.01:max(lon);
+% yvalue = min(lat):0.01:max(lat);
+% [X,Y] = meshgrid(xvalue, yvalue);
+% point_1 = [X(:) Y(:)];
 
 
 %% Import Abundance data

@@ -141,31 +141,31 @@ nano = group_ab(n,:)';
 %     subtitle('R² for period, no replacement')
  %end
 % 
-%% T_tsg in function of abundance
-T = dataCYTONEW(:,end-3);
-S = dataCYTONEW(:,end-4);
-ts=[];
-
-for n = [4,8, 10]
-for i = 1:length(dataCYTONEW)
-group_ab(n,i) = dataCYTONEW(i,6+n); 
-ts(i) = T(i)/S(i);
-end
-%mdl = fitlm(T(:),group_ab(n,:));
-
-%     figure;
-%     plotAdded(mdl)
-%     hold on
-%     grid('on')
-%     grid('minor')
-%     ylabel('Abundance (cell.cm3)')
-%     xlabel('T')
-%     title([file(1,n+1) mdl.Rsquared.Ordinary]);
-end
-
-pico2 = group_ab(4,:)';
-micro = group_ab(8,:)';
-pico = group_ab(10,:)';
+% %% T_tsg in function of abundance
+% T = dataCYTONEW(:,end-3);
+% S = dataCYTONEW(:,end-4);
+% ts=[];
+% 
+% for n = [4,8, 10]
+% for i = 1:length(dataCYTONEW)
+% group_ab(n,i) = dataCYTONEW(i,6+n); 
+% ts(i) = T(i)/S(i);
+% end
+% %mdl = fitlm(T(:),group_ab(n,:));
+% 
+% %     figure;
+% %     plotAdded(mdl)
+% %     hold on
+% %     grid('on')
+% %     grid('minor')
+% %     ylabel('Abundance (cell.cm3)')
+% %     xlabel('T')
+% %     title([file(1,n+1) mdl.Rsquared.Ordinary]);
+% end
+% 
+% pico2 = group_ab(4,:)';
+% micro = group_ab(8,:)';
+% pico = group_ab(10,:)';
 % x = T;
 % y = micro;
 % % Régression linéaire: y = a*x +b

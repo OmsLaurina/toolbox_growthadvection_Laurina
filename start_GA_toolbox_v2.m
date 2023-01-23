@@ -19,10 +19,10 @@ disp('start_GA_toolbox_test : ...');
 
 run('transfo_currents.m');
 run('chl_map.m');
-run('sst_map.m');
+%run('sst_map.m');
 run('abundance_map.m');
 run('Abundance_relations.m');
-run('relation_SST_T_tsg.m');
+%run('relation_SST_T_tsg.m');
 run('test_ini_map.m');
 
 %% ------------------ Set up ------------------ %%
@@ -67,7 +67,7 @@ index_hipp = 407:511;
 %%% Set run options
 
 load('inputs/Nsupply_PROTEVS.mat')
-options_plankton_model={'gmax_big',0.432,'eZ',0.1,'mZ',0.005, 'dt', dt, 'nbdays_advec', nbdays_advec};
+options_plankton_model={'dt', dt, 'nbdays_advec', nbdays_advec};
 name_curr='PROTEVS_bio2';          % using currents toolbox_* into Ariane_workplace/currents_data
 
 %%% Run the full GA model

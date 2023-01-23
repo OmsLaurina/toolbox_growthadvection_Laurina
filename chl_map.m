@@ -9,7 +9,7 @@ disp('chl_map : ...')
 % Add needed utility functions. Remember to add the path where histcn is installed.
 addpath(genpath('utils'))
 addpath(genpath('outputs'))
-addpath(genpath('CHL'))
+addpath(genpath('Data'))
 
 dataCYTONEW = dlmread('data_CYTO_NEW.txt');
 file = importdata('inputs/data_CYTO.txt');

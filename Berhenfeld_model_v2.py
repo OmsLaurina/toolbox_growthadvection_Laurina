@@ -12,6 +12,7 @@ Created on Tue Dec 20 12:39:07 2022
 import matplotlib.pyplot as plt
 import numpy as npy
 import numpy as np
+import random
 
 plt.close('all')
 
@@ -74,10 +75,17 @@ epsilon = 0.75
 j = 1
 
 #Apport de nutriment externe
+
+#Psupply constant
 Psupply = np.linspace(0.001,0.1,len(time))
 
+#Psupply variable
+# random_numbers = []
+# for i in range(len(time)):
+#     random_numbers.append(random.uniform(0, 1))
+#     Psupply =random_numbers
 
-def Behrenfeld_model_1P1Z_v1():
+def Behrenfeld_model_1P1Z_v2():
     
     ## -------------- Parameters
     global dt, end_time, time, c1_small, c1_big, c2, c3, u_small, u_big, P_small, P_big, Z, u0_small, u0_big, P0_small, P0_big, Z0, j, Psupply
@@ -126,11 +134,6 @@ def Behrenfeld_model_1P1Z_v1():
         Z.append(Z_next)
         PO4.append(PO4_next)
         
-        # #Growth rate calculated with j (ie: lag-time between division and loss rates)
-        # if t % j == 0:
-        #     u_small_next = PO4[t-j]/(PO4[t-j]+kP_small)*umax_small
-        #     u_big_next = PO4[t-j]/(PO4[t-j]+kP_big)*umax_big
-        
         u_small_next = PO4[t-1]/(PO4[t-1]+kP_small)*umax_small
         u_big_next = PO4[t-1]/(PO4[t-1]+kP_big)*umax_big
         
@@ -140,10 +143,12 @@ def Behrenfeld_model_1P1Z_v1():
         
     # Figures
     plt.figure(1)
-    plt.plot(time, P_small, label='P_small')
-    plt.plot(time, P_big, label='P_big')
-    plt.plot(time, Z, label='Zoo')
+    plt.plot(time, P_small, label='P_small', color="chartreuse")
+    plt.plot(time, P_big, label='P_big',color="green")
+    plt.plot(time, Z, label='Zoo', color="aqua")
+    plt.plot(time,PO4, label='PO4',color="magenta")
     plt.xlabel('Time')
+    plt.ylabel('mmolC.m^-3')
     plt.legend()
     plt.title('Behrenfeld model outputs')
     
@@ -162,5 +167,7 @@ def Behrenfeld_model_1P1Z_v1():
     plt.legend()
     plt.title('Behrenfeld model outputs')
     
+    
+    
 #Call the function       
-Behrenfeld_model_1P1Z_v1() 
+Behrenfeld_model_1P1Z_v2() 
