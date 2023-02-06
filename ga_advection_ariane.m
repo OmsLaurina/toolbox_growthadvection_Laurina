@@ -25,7 +25,7 @@ function positions=ga_advection_ariane(pos_ini,name_curr,varargin)
 % Reference: Messié, M., Petrenko, A., Doglioli, A. M., Aldebert, C., Martinez, E., Koenig, G., Bonnet, S., and Moutin, T. (2020)
 %	The delayed island mass effect: How islands can remotely trigger blooms in the oligotrophic ocean. 
 %	Geophysical Research Letters, 47(2), e2019GL085282, https://doi.org/10.1029/2019GL085282 
-
+tic
 
 global dir_ariane_global
 [arg,flag]=ga_read_varargin(varargin,{'dt',0.2,'time0',[],'nbdays_advec',[]},{'backwards'});
@@ -126,5 +126,5 @@ if flag.backwards
 	positions.lat2D=positions.lat2D(:,isort);
 end
 
-
+toc
 return

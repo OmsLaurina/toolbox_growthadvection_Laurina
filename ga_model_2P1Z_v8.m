@@ -1,4 +1,4 @@
-function varargout=ga_model_2P1Z_v8(Nsupply,C_nut,varargin)
+function varargout=ga_model_2P1Z_v8(Nsupply,C_nut,Pini1, Pini2,varargin)
 %% GA_MODEL_2P1Z_FROMPSUPPLY
 % Default parameters are based on Messié & Chavez (2017).
 % 
@@ -47,7 +47,7 @@ default_parameters={...
 'mZ',0.005,...											% Z2 quadratic mortality rate (mmolC^{-1} m^{3} d^{-1})
 'eZ',0.1,...													% zoo excretion fraction (Z1 and Z2) (d^{-1}) (Baklouti et al., 2021)
 'epsilon',0.75 ,...												% fraction of Z excretion that is available as regenerated PO4rients
-'P_1_ini',0.6,'P_2_ini',0.1,'Z_ini',0.6};	% initial biomass (mmolC m^{-3}) (In situ for P_1_ini with method from Marrec et al., 2018 and Tzortzis et al., 2021 & further)
+'P_1_ini',Pini1,'P_2_ini',Pini2,'Z_ini',0.6};	% initial biomass (mmolC m^{-3}) (In situ for P_1_ini with method from Marrec et al., 2018 and Tzortzis et al., 2021 & further)
 
 [arg,flag]=ga_read_varargin(varargin,[{'nbdays_advec',20,'dt',0.2,'time',[]},default_parameters],{'plot'});
 if length(Nsupply)>1 && isempty(arg.time), error('Give time if Nsupply is a vector'), end
@@ -142,7 +142,7 @@ end
 %% -------------- Ouputs
 
 units=struct('time','days','Nsupply','mmolC m^{-3} d^{-1}',...
-	'P_1','mmolC m^{-3}','P_2','mmolC m^{-3}','Z_1','mmolC m^{-3}','Z_2','mmolC m^{-3}',...
+	'P_1','mmolC m^{-3}','P_2','mmolC m^{-3}','Z','mmolC m^{-3}',...
 	'PO4','mmolC m^{-3}','Chl','mg m^{-3}','PP','gC m^{-3}/yr',...
 	'u_1','d^{-1}','u_2','d^{-1}','g_1','d^{-1}','g_2','d^{-1}', 'PP_1', 'gC m^{-3}/yr', 'PP_2','gC m^{-3}/yr', 'Export', 'mmolC m^{-3} d^{-1}','Budget','mmolC m^{-3} d^{-1}','death_Z', 'mmolC m^{-3} d^{-1}', 'p_fec','mmolC m^{-3} d^{-1}');
 

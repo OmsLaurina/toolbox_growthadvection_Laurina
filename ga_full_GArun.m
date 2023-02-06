@@ -1,4 +1,4 @@
-function ga_full_GArun(Nsupply_struct,name_curr,time_0,m_g,dt,nbdays_advec,varargin)
+function ga_full_GArun(Nsupply_struct,name_curr,varargin)
 
 
 %% GA_FULL_GA_RUN: for a given forcing (mostly nitrate supply and forcing), runs the plankton model alongside Lagrangian trajectories
@@ -25,13 +25,15 @@ function ga_full_GArun(Nsupply_struct,name_curr,time_0,m_g,dt,nbdays_advec,varar
 % Reference: Messié, M., D. A. Sancho-Gallegos, J. Fiechter, J. A. Santora, and F. P. Chavez (2022). 
 %			Satellite-based Lagrangian model reveals how upwelling and oceanic circulation shape krill hotspots in the California Current System.
 %			Frontiers in Marine Science, in press, https://doi.org/10.3389/fmars.2022.835813
+
+tic
 		
 global dir_ariane_global dir_output_global
 dir_curr=[dir_ariane_global,'currents_data/'];
 if nargin<2, error('Need to provide both Nsupply_struct and name_curr'), end
 arg=ga_read_varargin(varargin,{'options_plankton_model',{}});
-save('inputs/arg','arg')
-GArun_name=['test_',name_curr];
+GArun_name='zoo_struc';%[Nsupply_struct.name,'_',name_curr];
+
 		
 % Get available time for currents		
 curr_list=ga_dir2filenames(dir_curr,[name_curr,'_0*']);
@@ -39,8 +41,7 @@ time_curr=nan(length(curr_list),1);
 for itime=1:length(curr_list)
 	time_curr(itime)=ncread([dir_curr,curr_list{itime}],'time'); 
 end
-time0=time_0;
-m_g=m_g;
+time0=datenum(2018,4,30);
 %% -------- loop on days
 % inputs Nsupply
 load('inputs/Nsupply_PROTEVS')
@@ -66,22 +67,23 @@ time_mld = double(ncread(Nut_file.name,'time'));%minutes since 1900-01-01 00:00:
 lat_mld = double(ncread(Nut_file.name,'latitude'));
 lon_mld = double(ncread(Nut_file.name,'longitude'));
 
-lon_interp = min(lon_mld):m_g:max(lon_mld);
-lat_interp = min(lat_mld):m_g:max(lat_mld);
+lon_interp = min(lon_mld):0.02:max(lon_mld);
+lat_interp = min(lat_mld):0.02:max(lat_mld);
 [Xq, Yq] = meshgrid(lon_interp,lat_interp);
 Nut = interp2(lon_mld,lat_mld,Nut(:,:,1,1)',Xq, Yq);
 
-for ilon=1:length(lon_interp)
-    for ilat=1:length(lat_interp)
-        inputs.Nut_stock(ilat,ilon)=inputs.Nut(ilat,ilon,1)*106*1E-3; %to convert in mmolC/m³       
+for ilon=1:length(inputs.lon)-1
+    for ilat=1:length(inputs.lat)-1
+        inputs.Nut_stock(ilon,ilat)=Nut(ilat,ilon,1,1)*106*1E-3; %to convert in mmolC/m³       
     end
 end
-inputs.Nut_stock_matrix = inputs.Nut_stock;
 inputs.Nut_stock=reshape(inputs.Nut_stock,size(inputs.Nut_stock,1)*size(inputs.Nut_stock,2),1);
 save('inputs/inputs','inputs') 
 
-zoo_all=ga_growthadvection(inputs,name_curr,time0,dt,nbdays_advec,'options_plankton_model',arg.options_plankton_model);
+zoo_all=ga_growthadvection(inputs,name_curr,time0,'options_plankton_model',arg.options_plankton_model);
 
+  
+    
 save([dir_output_global,'zoo_Lagrangian.mat'],'zoo_all')
 
 
@@ -91,7 +93,7 @@ save([dir_output_global,'zoo_Lagrangian.mat'],'zoo_all')
 %output_grid=struct('lon',0:0.01:7,'lat',36:0.01:40);
 %ga_concatenation(GArun_name,output_grid,{'Z_big','Z_small','P_big','P_small'});
 
-
+toc
 return		
 		
 		

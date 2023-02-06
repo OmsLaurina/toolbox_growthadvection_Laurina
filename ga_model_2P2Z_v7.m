@@ -33,7 +33,7 @@ function varargout=ga_model_2P2Z_v7(Nsupply,C_nut,Pini1, Pini2,varargin)
 
 
 %% -------------- Default parameters (see Messié & Chavez, 2017 suppl inf)
-
+tic
 
 default_parameters={...
 'umax_small',1.9872,'umax_big',2.7648,'gmax_small',1.4226,'gmax_big',1.1120,...% maximum growth and grazing rates (d^{-1}) (Baklouti et al., 2021)
@@ -48,7 +48,7 @@ default_parameters={...
 'epsilon',0.75 ,...												% fraction of Zbig excretion that is available as regenerated PO4rients
 'P_small_ini',Pini1,'P_big_ini',Pini2,'Z_small_ini',0.3,'Z_big_ini',0.3};	% initial biomass (mmolC m^{-3}) (In situ for P_small_ini with method from Marrec et al., 2018 and Tzortzis et al., 2021 & further)
 
-[arg,flag]=ga_read_varargin(varargin,[{'nbdays_advec',20,'dt',0.2,'time',[],'upw_duration',1},default_parameters],{'plot'});
+[arg,flag]=ga_read_varargin(varargin,[{'nbdays_advec',13,'dt',0.2,'time',[],'upw_duration',1},default_parameters],{'plot'});
 if length(Nsupply)>1 && isempty(arg.time), error('Give time if Nsupply is a vector'), end
 
 
@@ -216,5 +216,5 @@ if flag.plot
     legend({'P\_small\_theo','P\_big\_theo','P\_small\_mod','P\_big\_mod' })
      
 end
-
+toc
 return

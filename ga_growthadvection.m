@@ -1,4 +1,4 @@
-function zoo=ga_growthadvection(init,name_curr,time0,dt,nbdays_advec,varargin)
+function zoo=ga_growthadvection(init,name_curr,time0,varargin)
 
 
 %% GA_GROWTHADVECTION: runs the plankton model alongside Lagrangian trajectories for a given initialization (positions & Nsupply) and initial time
@@ -17,12 +17,12 @@ function zoo=ga_growthadvection(init,name_curr,time0,dt,nbdays_advec,varargin)
 %							for krill customisation, set options_plankton_model to {'gmax_big',0.6*0.6,'eZ',0.1*0.6,'mZ',0.05*16/106*0.6}
 %
 % Monique Messié, 2021 for public version
+tic
 load('inputs/Nsupply_PROTEVS')
 load('inputs/curr_struc','time_curr')
 load('inputs/inputs')
 		
-%arg=ga_read_varargin(varargin,{'dt',0.2,'nbdays_advec',13,'options_plankton_model',{}});
-arg=ga_read_varargin(varargin,{'options_plankton_model',{}});
+arg=ga_read_varargin(varargin,{'dt',0.2,'nbdays_advec',13,'options_plankton_model',{}});
 if isempty(init.Nsupply), zoo=[]; return, end
 
 
@@ -33,15 +33,13 @@ xvalue = Nsupply_PROTEVS.lon_interp;
 yvalue = Nsupply_PROTEVS.lat_interp;
 iok = ~isnan(Nsupply_PROTEVS.Nsupply_interp(:,:,1));
 [X,Y] = meshgrid(xvalue, yvalue);
-point_1 = [X(:) Y(:)];
+point_1 = [X(iok) Y(iok)];
 
 % output time vector
-dt=dt;
-nbdays_advec = nbdays_advec;
-time=time0:dt:(time0+nbdays_advec);
+time=time0:arg.dt:(time0+arg.nbdays_advec);
 time0=time_curr(1);
 % output zoo
-plankton_model_outputs={'Chl','P_small','P_big','Z_small','Z_big'}; 
+plankton_model_outputs={'Chl','P_1','P_2','Z'}; 
 zoo=struct();
 zoo.lon_ini=inputs.lon;
 zoo.lat_ini=inputs.lat;
@@ -61,7 +59,7 @@ zoo.units.Nsupply='mmolC/m3/d';
 %% --------------------------------------------------------------------------------- %%
 load('inputs/inputs')
 
-positions=ga_advection_ariane(point_1,name_curr,'dt',dt,'time0',datenum(2018,4,30),'nbdays_advec',nbdays_advec); 
+positions=ga_advection_ariane(point_1,name_curr,'dt',arg.dt,'time0',datenum(2018,4,30),'nbdays_advec',arg.nbdays_advec); 
 for varname={'lon2D','lat2D'}, varname=varname{:}; 
 	zoo.(varname)(:,:)=positions.(varname); 
 end
@@ -77,52 +75,24 @@ lat_index_nut = [];
 lon_index_nut = [];
 for ip = 1:size(positions.lon2D,1)
 for it = 1:length(positions.time)
- [d, ix ] = min( abs( Nsupply_PROTEVS.lon_interp-positions.lon2D(ip,it) ) );        
-        lon_index_nut(ip,it)=ix;%indice des latitudes
- [d, iy ] = min( abs( Nsupply_PROTEVS.lat_interp-positions.lat2D(ip,it) ) );        
+ [d, ix ] = min( abs( Nsupply_PROTEVS.lon-positions.lon2D(ip,it) ) );        
+        lon_index_nut(ip,it)=ix;%indice des laongitude
+ [d, iy ] = min( abs( Nsupply_PROTEVS.lat-positions.lat2D(ip,it) ) );        
         lat_index_nut(ip,it)=iy;%indice des latitudes
 
-Nsupply_traj.Nsupply_part(ip,it)=Nsupply_PROTEVS.Nsupply_interp(iy,ix,floor(it*dt)+1);
+Nsupply_traj.Nsupply_part(ip,it)=Nsupply_PROTEVS.Nsupply_interp(ix,iy,floor(it*arg.dt)+1);
 end
 end
 save('outputs/Nsupply_traj','Nsupply_traj')
 
 %% --------------------------------------------------------------------------------- %%
-%% 										SST FOR TRAJECTORY							 %%
-%% --------------------------------------------------------------------------------- %%
-load('inputs/SST_MUR')
-SST_traj=struct();
-SST_traj.SST_part = NaN(size(positions.lon2D,1),length(positions.time));
-lat_index_sst = [];
-lon_index_sst = [];
-for ip = 1:size(positions.lon2D,1)
-for it = 1:length(positions.time)
- [d, ix ] = min( abs( SST_MUR.lon_sst-positions.lon2D(ip,it ) ));        
-        lon_index_sst(ip,it)=ix;%indice des latitudes
- [d, iy ] = min( abs( SST_MUR.lat_sst-positions.lat2D(ip,it) ));        
-        lat_index_sst(ip,it)=iy;%indice des latitudes
-
-SST_traj.SST_part(ip,it)=SST_MUR.sst(ix,iy,floor(it*dt)+120);
-
-end
-end
-save('outputs/SST_traj','SST_traj')
-
-%% --------------------------------------------------------------------------------- %%
 %% 										RUN PLANKTON MODEL							 %%
 %% --------------------------------------------------------------------------------- %%
-load('inputs/iok')
-load('inputs/biom_ini')
-psmall_ini = biom_ini.pico(iok);
-psmall_ini = reshape(psmall_ini,[size(psmall_ini,1)*size(psmall_ini,2),1]);
-pbig_ini = biom_ini.micro(iok);
-pbig_ini = reshape(pbig_ini,[size(pbig_ini,1)*size(pbig_ini,2),1]);
-
 
 for ilat=1:size(positions.lon2D,1) %%% run for all particles
     %for it =1:length(time)
 	%if ~isnan(zoo.Nsupply_ini(ilat,1))
-		output=ga_model_2P2Z_fromPsupply_SST_Biss_Med(Nsupply_traj.Nsupply_part(ilat,:),SST_traj.SST_part(ilat,:),inputs.Nut_stock(ilat,1),psmall_ini(ilat),pbig_ini(ilat),'time',zoo.time-zoo.time(1),arg.options_plankton_model{:}); 
+		output = ga_model_2P1Z_v8(Nsupply_traj.Nsupply_part(ilat,:),0.5,0.6,0.1,'time',zoo.time-zoo.time(1),arg.options_plankton_model{:});
 		%output=ga_model_2P2Z_fromPsupply_Med(Nsupply_traj.Nsupply_part(ilat,:),inputs.Nut_stock(ilat,1),psmall_ini(ilat),pbig_ini(ilat),'time',zoo.time-zoo.time(1),arg.options_plankton_model{:}); 
         %output = ga_model_2P2Z_fromP_SST(Nsupply_traj.Nsupply_part(ilat,:),SST_traj.SST_part(ilat,:),psmall_ini(ilat),pbig_ini(ilat),'time',zoo.time-zoo.time(1),arg.options_plankton_model{:});
         for varname=plankton_model_outputs, varname=varname{:}; 
@@ -131,6 +101,5 @@ for ilat=1:size(positions.lon2D,1) %%% run for all particles
         end
     %end
 end
-				
+toc				
 return	
-		
