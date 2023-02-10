@@ -14,7 +14,7 @@ tic
 
 clear all, close all
 
-n_days = 600; % nb de jours de simulation
+n_days = 2000; % nb de jours de simulation
 dt = 0.2; % pas de temps
 time=(0:dt:n_days); % temps
 

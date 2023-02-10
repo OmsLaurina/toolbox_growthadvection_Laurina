@@ -37,10 +37,8 @@ default_parameters={...
 'mP',0,...			% P2 mortality rate (default 0 ie no P2 sinking) (d^{-1})
 'mZ',0.007,...		% Z2 quadratic mortality rate (mmolC^{-1} m^{3} d^{-1})
 'eZ',0.1,...	    % zoo excretion rate (Z1 and Z2) (d^{-1})
-'alpha1',0.7,...    % conversion factor from PO4 to P1
-'alpha2',0.7,...    % conversion factor from PO4 to P2
 'gamma1',0.7,...    % conversion factor from P1 to Z
-'gamma2',0.5,...    % conversion factor from P2 to Z
+'gamma2',0.7,...    % conversion factor from P2 to Z
 'epsilon',0.75 ,... % fraction of Z excretion that is available as regenerated PO4
 'P1_ini',0.6,...  % initial biomass of P1 (mmolC m^{-3})
 'P2_ini',0.1,...  % initial biomass of P2 (mmolC m^{-3})
@@ -109,8 +107,8 @@ for t=2:nb_time
 	%%% FLUXES
     
     % primary production
-    PP1(t)=arg.alpha1*u1*P1(t-1); 
-    PP2(t)=arg.alpha2*u2*P2(t-1);
+    PP1(t)=u1*P1(t-1); 
+    PP2(t)=u2*P2(t-1);
     
     % predation
 	G1(t)=arg.gamma1*g1*Z(t-1); 
