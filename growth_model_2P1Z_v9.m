@@ -22,7 +22,7 @@ function varargout=growth_model_2P1Z_v9(Nsupply,C_nut,varargin)
 
 %% -------------- Default parameters
 
-% For now we define :
+% For the time we define :
 % 1 = Small phytoplankton (SYNECO, PICO) < 2um
 % 2 = Big phytoplankton (MICRO) >20um
 
@@ -96,13 +96,21 @@ PO4(1)=C_nut;
 
 for t=2:nb_time
 
-	% growth rates
-    u1=PO4(t-1)/(arg.kP1+PO4(t-1))*arg.umax1;
-    u2=PO4(t-1)/(arg.kP2+PO4(t-1))*arg.umax2;
+% 	% growth rates
+%     u1=PO4(t-1)/(arg.kP1+PO4(t-1))*arg.umax1;
+%     u2=PO4(t-1)/(arg.kP2+PO4(t-1))*arg.umax2;
+
+% growth rates
+    u1=PO4(t-1)*arg.umax1;
+    u2=PO4(t-1)*arg.umax2;
   
+%     % functional response
+%     g1=P1(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax1; 	
+% 	g2=P2(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax2;
+
     % functional response
-    g1=P1(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax1; 	
-	g2=P2(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax2;
+    g1=P1(t-1)*arg.gmax1; 	
+	g2=P2(t-1)*arg.gmax2;
 
 	%%% FLUXES
     
@@ -146,7 +154,10 @@ for t=2:nb_time
     
 end
 
-% save('outputs/maxPP21', 'maxPP21');
+save('outputs/P2', 'P2');
+save('outputs/P1', 'P1');
+save('outputs/PO4', 'PO4');
+save('outputs/Z', 'Z');
 
 %% -------------- Ouputs
 

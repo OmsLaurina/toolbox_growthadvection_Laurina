@@ -12,4 +12,4 @@ old_versions/
 utils/cbdate/
 utils/cmocean/
 utils/landmask/
-scripts_non_ess/
+other_scripts/
