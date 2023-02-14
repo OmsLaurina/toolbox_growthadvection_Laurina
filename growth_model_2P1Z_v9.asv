@@ -18,7 +18,7 @@ function varargout=growth_model_2P1Z_v9(Nsupply,C_nut,varargin)
 %		Nutrient supply is Phosphate instead Nitrate
 %		One nutrient compartiment
 %       One zooplankton compartiment
-%       Add conversion factor : prey to predator
+%       Add conversion factor : ressources to consummator
 
 %% -------------- Default parameters
 
@@ -218,48 +218,43 @@ if flag.plot
     figure, hold on
     grid on 
     box on
-    % Calcul des dérivées de P1 et PO4 par rapport au temps
-    dpo4_dt = gradient(output.PO4, arg.dt);
+    % Calcul des dérivées de P1 et P2 par rapport au temps
     dp1_dt = gradient(output.P1, arg.dt);
+    dpo4_dt = gradient(output.PO4, arg.dt);
     % Tracé du portrait de phase
-    plot(output.PO4, output.P1)
-    xlabel('PO4')
-    ylabel('P1')
+    plot(output.P1, output.PO4)
+    xlabel('P1')
+    ylabel('PO4')
     % Tracé du champ de vecteur sur le portrait de phase
-    quiver(output.PO4, output.P1, dpo4_dt, dp1_dt)
+    quiver(output.P1, output.PO4, dp1_dt, dpo4_dt)
     
     % 2. P2 vs PO4
     figure, hold on
     grid on 
     box on
+    % Calcul des dérivées de P1 et P2 par rapport au temps
+    dp2_dt = gradient(output.P2, arg.dt);
     dpo4_dt = gradient(output.PO4, arg.dt);
-    dp2_dt = gradient(output.P2, arg.dt);
-    plot(output.PO4, output.P2)
-    xlabel('PO4')
-    ylabel('P2')
-    quiver(output.PO4, output.P2, dpo4_dt, dp2_dt)
+    % Tracé du portrait de phase
+    plot(output.P2, output.PO4)
+    xlabel('P2')
+    ylabel('PO4')
+    % Tracé du champ de vecteur sur le portrait de phase
+    quiver(output.P2, output.PO4, dp2_dt, dpo4_dt)
     
-    % 3. P1 vs Z
+    % 3.  vs Z
     figure, hold on
     grid on 
     box on
-    dZ_dt = gradient(output.Z, arg.dt);
+    % Calcul des dérivées de P1 et P2 par rapport au temps
     dp1_dt = gradient(output.P1, arg.dt);
-    plot(output.Z, output.P1)
-    xlabel('Z')
-    ylabel('P1')
-    quiver(output.Z, output.P1, dZ_dt, dp1_dt)
-    
-    % 4. P2 vs Z
-    figure, hold on
-    grid on 
-    box on
-    dZ_dt = gradient(output.Z, arg.dt);
-    dp2_dt = gradient(output.P2, arg.dt);
-    plot(output.Z, output.P2)
-    xlabel('Z')
-    ylabel('P2')
-    quiver(output.Z, output.P2, dZ_dt, dp2_dt)
+    dpo4_dt = gradient(output.PO4, arg.dt);
+    % Tracé du portrait de phase
+    plot(output.P1, output.PO4)
+    xlabel('P1')
+    ylabel('PO4')
+    % Tracé du champ de vecteur sur le portrait de phase
+    quiver(output.P1, output.PO4, dp1_dt, dpo4_dt)
      
 end
 

@@ -66,6 +66,4 @@ output_3 = growth_model_2P1Z_v9(Psupply,C_nut,'time',time,'plot');
 %%% --------------- Adapted model version 9 
 % pcolor1 = pcolor_umax1_Psupp_v9(ones(length(time),1)*1,C_nut,'time',time,'plot');
 
-pcolor2 = pcolor_gmax1_Psupp_v9(ones(length(time),1)*1,C_nut,'time',time,'plot');
-
 toc
