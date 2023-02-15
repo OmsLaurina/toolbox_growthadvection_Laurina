@@ -1,4 +1,4 @@
-function varargout=pcolor_umax1_Psupp_v9(Nsupply,C_nut,varargin)
+function varargout=pcolor_gmax1_umax1_v9(Nsupply,C_nut,varargin)
 
 %% -------------- Default parameters
 
@@ -76,22 +76,22 @@ PO4(1)=C_nut;
 
 n = 10;
 
+min_gmax1 = 0;
+max_gmax1 = 5;
+l_gmax1 = linspace(min_gmax1,max_gmax1,n);
+
 min_umax1 = 0;
 max_umax1 = 5;
 l_umax1 = linspace(min_umax1,max_umax1,n);
 
-min_Psupp = 0;
-max_Psupp = 1;
-l_Psupp = linspace(min_Psupp,max_Psupp,n);
-
-P_1=zeros(length(l_umax1),length(l_Psupp));
-P_2=zeros(length(l_umax1),length(l_Psupp));
+P_1=zeros(length(l_gmax1),length(l_umax1));
+P_2=zeros(length(l_gmax1),length(l_umax1));
 
 i = 1;
-for umax1=l_umax1
+for gmax1=l_gmax1
     
     j=1;
-    for Psupp=l_Psupp
+    for umax1=l_umax1
         
         for t=2:nb_time
             
@@ -101,7 +101,7 @@ for umax1=l_umax1
 
 
             % functional response
-            g1=P1(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax1; 	
+            g1=P1(t-1)/(arg.kG+P1(t-1)+P2(t-1))*gmax1; 	
             g2=P2(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax2;
 
 
@@ -137,7 +137,7 @@ for umax1=l_umax1
 
             % phosphate
             % Define Nsupply = 1
-            PO4(t)=PO4(t-1)+Nsupply(t)*Psupp*arg.dt+reg(t)*arg.dt-PP1(t)*arg.dt-PP2(t)*arg.dt; PO4(PO4<=0)=0;
+            PO4(t)=PO4(t-1)+Nsupply(t)*arg.dt+reg(t)*arg.dt-PP1(t)*arg.dt-PP2(t)*arg.dt; PO4(PO4<=0)=0;
 
             % phytoplanktons
             P1(t)=P1(t-1)+PP1(t)*arg.dt-G1(t)*arg.dt; P1(P1<=0)=0;
@@ -162,7 +162,7 @@ save('outputs/P_1', 'P_1');
 %% -------------- Ouputs
 
 
-output=struct('P_1', P_1, 'P_2', P_2,'attributs',struct('arg',arg));
+output=struct('P_1', P_1, 'P_2', P_2, 'time',time,'PO4', PO4, 'attributs',struct('arg',arg));
 varargout={output}; varargout=varargout(1:nargout);
 
 
@@ -172,29 +172,29 @@ if flag.plot
     
     figure,hold on
     box on
-    x = linspace(min_umax1,max_umax1,n);
-    y = linspace(min_Psupp,max_Psupp,n);
+    x = linspace(min_gmax1,max_gmax1,n);
+    y = linspace(min_umax1,max_umax1,n);
     [X,Y] = meshgrid(x,y);
     pcolor(X,Y,output.P_1)
-    xlabel('umax\_small')
-    ylabel('Psupp')
+    xlabel('gmax1')
+    ylabel('umax1')
     shading interp
     colorbar
-    %caxis([0 0.1])
-    title('P\_small')
+    %caxis([0 0.01])
+    title('P1')
     
     figure,hold on
     box on
-    x = linspace(min_umax1,max_umax1,n);
-    y = linspace(min_Psupp,max_Psupp,n);
+    x = linspace(min_gmax1,max_gmax1,n);
+    y = linspace(min_umax1,max_umax1,n);
     [X,Y] = meshgrid(x,y);
     pcolor(X,Y,output.P_2)
-    xlabel('umax\_small')
-    ylabel('Psupp')
+    xlabel('gmax1')
+    ylabel('umax1')
     shading interp
     colorbar
-    %caxis([0 0.1])
-    title('P\_big')
+    %caxis([0 0.01])
+    title('P2')
     
 end
 

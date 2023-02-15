@@ -29,8 +29,8 @@ function varargout=growth_model_2P1Z_v9(Nsupply,C_nut,varargin)
 default_parameters={...
 'umax1',1.9872,...  % maximum growth rates of P1 (d^{-1})
 'umax2',2.7648,...  % maximum growth rates of P2 (d^{-1})
-'gmax1',1.4226,...  % maximum grazing rates of Z on P1 (d^{-1})
-'gmax2',1.4226,...  % maximum grazing rates of Z on P2 (d^{-1})
+'gmax1',1.5226,...  % maximum grazing rates of Z on P1 (d^{-1})
+'gmax2',1.1226,...  % maximum grazing rates of Z on P2 (d^{-1})
 'kP1',1,...	        % half-saturation constant for P1 on PO4 (mmolC m^{-3})
 'kP2',2,...	        % half-saturation constant for P2 on PO4 (mmolC m^{-3})
 'kG',5,...			% half-saturation constant for Z on P (mmolC m^{-3})
@@ -40,8 +40,8 @@ default_parameters={...
 'gamma1',0.7,...    % conversion factor from P1 to Z
 'gamma2',0.7,...    % conversion factor from P2 to Z
 'epsilon',0.75 ,... % fraction of Z excretion that is available as regenerated PO4
-'P1_ini',0.6,...  % initial biomass of P1 (mmolC m^{-3})
-'P2_ini',0.1,...  % initial biomass of P2 (mmolC m^{-3})
+'P1_ini',0.6,...    % initial biomass of P1 (mmolC m^{-3})
+'P2_ini',0.1,...    % initial biomass of P2 (mmolC m^{-3})
 'Z_ini',0.6;	    % initial biomass of Z (mmolC m^{-3})
 };	
 
@@ -104,7 +104,6 @@ for t=2:nb_time
     % functional response
     g1=P1(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax1; 	
 	g2=P2(t-1)/(arg.kG+P1(t-1)+P2(t-1))*arg.gmax2;
-
 
 
 	%%% FLUXES

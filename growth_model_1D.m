@@ -14,7 +14,7 @@ tic
 
 clear all, close all
 
-n_days = 600; % nb de jours de simulation
+n_days = 2000; % nb de jours de simulation
 dt = 0.2; % pas de temps
 time=(0:dt:n_days); % temps
 
@@ -24,11 +24,11 @@ Psupply_moy = 0.01; %0.06 = seuil a partir duquel Pbig prend le dessus et gagne
 %Psupply constant
 Psupply = ones(length(time),1)*Psupply_moy;
 
-% %Psupply variable
+%Psupply variable
 % w = 0.5; %periode (day)
 % Psupply_sin = time*NaN;
 % Psupply = time*NaN;
-% 
+
 % %Sinusoïdalement
 % b = 0.01; %amplitude (mmolC/m3)
 % for i=1:length(time)
@@ -36,7 +36,7 @@ Psupply = ones(length(time),1)*Psupply_moy;
 %     Psupply(i) = Psupply_sin(i);
 % end
 
-% %Pulsé
+%Pulsé
 % T = 4; %(pulses en jours)
 % b = (Psupply_moy*0.25*T)/(1-exp(-0.25*T))-Psupply_moy;
 % for i=1:length(time)
@@ -66,6 +66,8 @@ output_3 = growth_model_2P1Z_v9(Psupply,C_nut,'time',time,'plot');
 %%% --------------- Adapted model version 9 
 % pcolor1 = pcolor_umax1_Psupp_v9(ones(length(time),1)*1,C_nut,'time',time,'plot');
 
-pcolor2 = pcolor_gmax1_Psupp_v9(ones(length(time),1)*1,C_nut,'time',time,'plot');
+% pcolor2 = pcolor_gmax1_Psupp_v9(ones(length(time),1)*1,C_nut,'time',time,'plot');
+
+% pcolor2 = pcolor_gmax1_umax1_v9(Psupply,C_nut,'time',time,'plot');
 
 toc
