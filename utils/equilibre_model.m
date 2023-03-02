@@ -51,6 +51,9 @@ j44 = Psupply+epsilon*eZ*((1-gamma2)*P2_barre*gmax2*Z_barre)-umax2*P2_barre;
 
 J_barre1 = [j11 j12 j13 j14; j21 j22 j23 j24; j31 j32 j33 j34; j41 j42 j43 j44];
 
+Val_p = eig(J_barre1);
+[VALp, VECp] = eig(J_barre1);
+
 %Determinant matrice non carré 
 
 

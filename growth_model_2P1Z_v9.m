@@ -29,8 +29,8 @@ function varargout=growth_model_2P1Z_v9(Nsupply,C_nut,varargin)
 default_parameters={...
 'umax1',1.9872,...  % maximum growth rates of P1 (d^{-1})
 'umax2',2.7648,...  % maximum growth rates of P2 (d^{-1})
-'gmax1',1.5226,...  % maximum grazing rates of Z on P1 (d^{-1})
-'gmax2',1.1226,...  % maximum grazing rates of Z on P2 (d^{-1})
+'gmax1',1.4226,...  % maximum grazing rates of Z on P1 (d^{-1})
+'gmax2',1.4226,...  % maximum grazing rates of Z on P2 (d^{-1})
 'kP1',1,...	        % half-saturation constant for P1 on PO4 (mmolC m^{-3})
 'kP2',2,...	        % half-saturation constant for P2 on PO4 (mmolC m^{-3})
 'kG',5,...			% half-saturation constant for Z on P (mmolC m^{-3})
@@ -174,6 +174,7 @@ if flag.plot
     %Temporal evolution
 	figure, hold on
     box on
+    grid on
 	plot(output.time,output.P1,'LineWidth',2, 'Color','g')
 	plot(output.time,output.P2,'LineWidth',2,'Color', '#77AC30')
 	plot(output.time,output.Z,'LineWidth',2,'Color','#00FFFF')

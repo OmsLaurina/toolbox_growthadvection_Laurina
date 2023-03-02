@@ -14,12 +14,12 @@ tic
 
 clear all, close all
 
-n_days = 2000; % nb de jours de simulation
+n_days = 600; % nb de jours de simulation
 dt = 0.2; % pas de temps
 time=(0:dt:n_days); % temps
 
 % Psupply (mmolC m^{-3} d^{-1}) = apport externe de nutriment
-Psupply_moy = 0.01; %0.06 = seuil a partir duquel Pbig prend le dessus et gagne
+Psupply_moy = 0.01;
 
 %Psupply constant
 Psupply = ones(length(time),1)*Psupply_moy;
