@@ -9,9 +9,8 @@ import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
 from scipy.optimize import fsolve
 from scipy import integrate
-# import scienceplots
-
-# plt.style.use(['science','no-latex'])
+import scienceplots
+plt.style.use(['science','no-latex'])
 plt.close('all')
 
 # Set up
@@ -27,7 +26,7 @@ gmax1=0.3     # maximum grazing rates of Z on P1 [d**{-1}]
 gmax2=0.6     # maximum grazing rates of Z on P2 [d**{-1}]
 mP=0		  # P2 mortality rate (default 0 ie no P2 sinking) [d**{-1}]
 mZ=0.05 	  # Z2 quadratic mortality rate [mmolC**{-1} m**{3} d**{-1}]
-eZ=0.1        # zoo excretion rate (Z1 and Z2) [d**{-1}]
+eZ=1          # zoo excretion rate (Z1 and Z2) [d**{-1}]
 gamma1=0.6    # conversion factor from P1 to Z [/]
 gamma2=0.6    # conversion factor from P2 to Z [/]
 epsilon=0.25  # fraction of Z excretion that is available as regenerated PO4 [/]

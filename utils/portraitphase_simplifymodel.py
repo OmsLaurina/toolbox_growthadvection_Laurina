@@ -38,7 +38,7 @@ def growth_model_simplify(u,t=0):
 
 # 1/ P1 = 0 
 print('Equilibrium values for P1 =0 :')
-PO4eq1 = Psupply*(gmax2*(gamma2-eZ*(1-gamma2))*(epsilon*eZ*(1-gamma2)+1))/mZ
+PO4eq1 = np.sqrt(Psupply*(gmax2**2*(gamma2-eZ*(1-gamma2))*(epsilon*eZ*(1-gamma2)+1))/mZ)
 print('PO4 =', PO4eq1)
 Zeq1 = (umax2/gmax2)*PO4eq1
 print('Z =', Zeq1)
@@ -73,8 +73,13 @@ t = np.linspace(0,150,1000)
 for i, col1 in zip(valuesP, vcolors):
             u0 = [E*i for E in EQ2]
             u = integrate.odeint(growth_model_simplify,u0,t)
-            ax.plot(u[:,1], u[:,2], u[:,3], lw=0.5*i, color=col1)
+            ax.plot(u[:,1], u[:,2], u[:,3], lw=0.5*i, color=col1,label = f"CI=({u0[1]:.2f}, {u0[2]:.2f}, {u0[3]:.2f})")
+            ax.set_xlabel('P2')
+            ax.set_ylabel('Z')
+            ax.set_zlabel('PO4')
             ax.view_init(23, -151)
+            plt.legend()
+            plt.title('Portrait de phase pour P1 = 0')
              
 # P2 = 0
 plt.figure(2)
@@ -84,7 +89,11 @@ t = np.linspace(0,150,1000)
 for i, col1 in zip(valuesP, vcolors):
             u0 = [E*i for E in EQ1]
             u = integrate.odeint(growth_model_simplify,u0,t)
-            ax.plot(u[:,0], u[:,2], u[:,3], lw=0.5*i, color=col1)
-            ax.view_init(23, -151)          
-            
+            ax.plot(u[:,0], u[:,2], u[:,3], lw=0.5*i, color=col1, label = f"CI=({u0[0]:.2f}, {u0[2]:.2f}, {u0[3]:.2f})")
+            ax.set_xlabel('P1')
+            ax.set_ylabel('Z')
+            ax.set_zlabel('PO4')
+            ax.view_init(23, -151)  
+            plt.legend()
+            plt.title('Portrait de phase pour P2 = 0')
             

@@ -143,6 +143,7 @@ def growth_model_2P1Z_v9(Psupply,time,**kwargs):
        
         p_fec.append(p_fecnext)
         Export.append(Exportnext)
+    
        
         #PP1 puise en premier dans le pool de nutriments
         max_available_PO4 = PO4[t-1]+Psupply[t]*dt+reg[t]*dt
@@ -153,6 +154,7 @@ def growth_model_2P1Z_v9(Psupply,time,**kwargs):
         max_available_PO4=max_available_PO4-PP1[t]*dt
         if PP2[t]>max_available_PO4/dt:
             PP2[t]=max_available_PO4/dt
+            
             
         
         # biomasses
@@ -177,4 +179,5 @@ def growth_model_2P1Z_v9(Psupply,time,**kwargs):
         Z.append(Z_next)
         PO4.append(PO4_next)
         
-    return P1,P2,Z,PO4,arg
+        
+    return P1,P2,Z,PO4,Export,arg
