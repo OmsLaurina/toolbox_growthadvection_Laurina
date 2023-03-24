@@ -21,12 +21,12 @@ plt.close('all')
 # Timestep (same than timestep of the growth function : by default is 0.2)
 dt = 0.2
 # Choose the time at which the simulation end (days)
-end_time = 600
+end_time = 2000
 # create a time vector from 0 to end_time, seperated by a timestep
 time = npy.arange(0,end_time,dt)
 
 # Externe input of nutrients 
-Psupply_moy = 0.02 #0.05 = threshold where P2 became dominant
+Psupply_moy = 0.1 #0.05 = threshold where P2 became dominant
 #Psupply constant
 Psupply =[Psupply_moy] * len(time)
 
