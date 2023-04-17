@@ -26,7 +26,7 @@ end_time = 2000
 time = npy.arange(0,end_time,dt)
 
 # Externe input of nutrients 
-Psupply_moy = 0.1 #0.05 = threshold where P2 became dominant
+Psupply_moy = 0.01 #0.05 = threshold where P2 became dominant
 #Psupply constant
 Psupply =[Psupply_moy] * len(time)
 
