@@ -48,59 +48,59 @@ with PdfPages('../outputs/model_V10/outputs_analysis_v10.pdf') as pdf:
     plt.figure(1)
     plt.plot(time, P1, label='P1', color="chartreuse")
     plt.plot(time, P2, label='P2', color="green")
-    plt.plot(time, Z, label='Zoo', color="aqua")
+    plt.plot(time, Z, label='Z', color="aqua")
     plt.plot(time,PO4, label='PO4', color="magenta")
-    plt.xlabel('Time')
-    plt.ylabel('mmolC.m^-3')
+    plt.xlabel('Time [day]')
+    plt.ylabel('Biomasses [$mmolC.m^{-3}$]')
     plt.legend(frameon=True) 
-    plt.title('model outputs (concentration over time)')
+    #plt.title('model outputs (concentration over time)')
     pdf.savefig()
     
-    #Budget
-    plt.figure(2)
-    plt.plot(time, Psupply, label='Psupply', color="chartreuse")
-    plt.plot(time, Export, label='Export', color="green")
-    plt.xlabel('Time')
-    plt.ylabel('mmolC.m^-3.d^-1')
-    plt.legend(frameon=True) 
-    plt.title('Budget')
-    pdf.savefig()
+    # #Budget
+    # plt.figure(2)
+    # plt.plot(time, Psupply, label='Psupply', color="chartreuse")
+    # plt.plot(time, Export, label='Export', color="green")
+    # plt.xlabel('Time')
+    # plt.ylabel('mmolC.m^-3.d^-1')
+    # plt.legend(frameon=True) 
+    # plt.title('Budget')
+    # pdf.savefig()
     
-    #Figure 2 : Monod function and Holling type II response
-    from utils.f_monod_hollingII import f_monod, f_hollingII
+    # #Figure 2 : Monod function and Holling type II response
+    # from utils.f_monod_hollingII import f_monod, f_hollingII
     
-    ## MONOD
-    plt.figure(3)
-    N_theo_PO4 = np.linspace(0, 10, len(time))
-    f_monod(N_theo_PO4, arg['umax1'], arg['kP1'],"chartreuse")
-    f_monod(N_theo_PO4, arg['umax2'], arg['kP2'],"green")
-    f_monod(PO4, arg['umax1'], arg['kP1'],"blue")
-    f_monod(PO4, arg['umax2'], arg['kP2'],"red")
+    # ## MONOD
+    # plt.figure(3)
+    # N_theo_PO4 = np.linspace(0, 10, len(time))
+    # f_monod(N_theo_PO4, arg['umax1'], arg['kP1'],"chartreuse")
+    # f_monod(N_theo_PO4, arg['umax2'], arg['kP2'],"green")
+    # f_monod(PO4, arg['umax1'], arg['kP1'],"blue")
+    # f_monod(PO4, arg['umax2'], arg['kP2'],"red")
     
-    plt.xlabel('[PO4] mmolC.m³')
-    plt.ylabel('\u03BC d^{-1}')
-    plt.legend(['P_1_theo', 'P_2_theo', 'P_1_mod', 'P_2_mod'])
-    pdf.savefig()
+    # plt.xlabel('[PO4] mmolC.m³')
+    # plt.ylabel('\u03BC d^{-1}')
+    # plt.legend(['P_1_theo', 'P_2_theo', 'P_1_mod', 'P_2_mod'])
+    # pdf.savefig()
       
-    ## HOLLINGII
-    plt.figure(4)
-    P1_theo = np.linspace(0, 5, len(time))
-    P2_theo = np.linspace(0, 5, len(time))
-    SUM_P = P1_theo + P2_theo
+    # ## HOLLINGII
+    # plt.figure(4)
+    # P1_theo = np.linspace(0, 5, len(time))
+    # P2_theo = np.linspace(0, 5, len(time))
+    # SUM_P = P1_theo + P2_theo
     
-    P1_array = np.array(P1)
-    P2_array = np.array(P2)
-    SUM_P_array = P1_array+P2_array
+    # P1_array = np.array(P1)
+    # P2_array = np.array(P2)
+    # SUM_P_array = P1_array+P2_array
     
-    f_hollingII(P1_theo, SUM_P, arg['gmax1'], arg['kZ1'],"chartreuse")
-    f_hollingII(P2_theo, SUM_P, arg['gmax2'], arg['kZ2'],"green")
-    f_hollingII(P1, SUM_P_array, arg['gmax1'], arg['kZ1'],"blue")
-    f_hollingII(P2, SUM_P_array, arg['gmax2'], arg['kZ2'],"red")
+    # f_hollingII(P1_theo, SUM_P, arg['gmax1'], arg['kZ1'],"chartreuse")
+    # f_hollingII(P2_theo, SUM_P, arg['gmax2'], arg['kZ2'],"green")
+    # f_hollingII(P1, SUM_P_array, arg['gmax1'], arg['kZ1'],"blue")
+    # f_hollingII(P2, SUM_P_array, arg['gmax2'], arg['kZ2'],"red")
     
-    plt.xlabel('Phytoplancton mmolC.m³')
-    plt.ylabel('g d^{-1}')
-    plt.legend(['Z-->P1_theo', 'Z-->P2_theo', 'Z-->P1_mod', 'Z-->P2_mod'])
-    pdf.savefig()
+    # plt.xlabel('Phytoplancton mmolC.m³')
+    # plt.ylabel('g d^{-1}')
+    # plt.legend(['Z-->P1_theo', 'Z-->P2_theo', 'Z-->P1_mod', 'Z-->P2_mod'])
+    # pdf.savefig()
     
     # # Figure 3 : Portrait de phase
     # # 1. P1

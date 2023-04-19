@@ -19,7 +19,7 @@ from growth_model_2P1Z_v10 import growth_model_2P1Z_v10
 
 # Timestep (same than timestep of the growth function : by default is 0.2)
 dt = 0.2
-# Choose the time at which the simulation end (days)
+# Choose the time at which the simulation end (days) (steady-state)
 end_time = 2000
 # create a time vector from 0 to end_time, seperated by a timestep
 time = npy.arange(0,end_time,dt)
@@ -38,7 +38,7 @@ Psupply_arr = np.array(Psupply)
 
 number_param = 1
 
-n =  100#number of value tested
+n =  100 #number of value tested
 n2 = n #to reduce the number of line in the line plots 
 
 #name of the parameters in the model you want to study 
@@ -49,6 +49,7 @@ param2 = 'kP1'
 name_param1='PSUPPLY'
 name_param2='kP1'
 
+#Tested range of values
 min_param1 = 0.01
 max_param1 = 0.1
 l_param1 = np.linspace(min_param1,max_param1,n)
