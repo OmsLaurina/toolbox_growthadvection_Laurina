@@ -27,7 +27,7 @@ time = npy.arange(0,end_time,dt)
 # Externe input of nutrients 
 
 #!! WARNING DEFINE PSUPPLY = 1 IF YOU WANT TO TEST THIS PARAMETER !!
-Psupply_moy = 1 #0.01
+Psupply_moy = 0.01 #0.01
 #Psupply constant
 Psupply =[Psupply_moy] * len(time)
 
@@ -36,26 +36,26 @@ Psupply_arr = np.array(Psupply)
 
 """ MODIFY THIS TO CHOOSE THE PARAMETERS AND VALUE RANGE YOU WANT TO TEST """
 
-number_param = 1
+number_param = 2
 
 n =  100 #number of value tested
 n2 = n #to reduce the number of line in the line plots 
 
 #name of the parameters in the model you want to study 
-param1 = 'psupp'
-param2 = 'kP1'
+param1 = 'kP1'
+param2 = 'kP2'
 
 # name for plot
-name_param1='PSUPPLY'
-name_param2='kP1'
+name_param1='kP1'
+name_param2='kP2'
 
 #Tested range of values
-min_param1 = 0.01
-max_param1 = 0.1
+min_param1 = 1
+max_param1 = 10
 l_param1 = np.linspace(min_param1,max_param1,n)
 
-min_param2 = 0.5
-max_param2 = 2
+min_param2 = 10
+max_param2 = 20
 l_param2 = np.linspace(min_param2,max_param2,n)
 
 if number_param == 2:
@@ -74,7 +74,7 @@ if number_param == 2:
     for param1 in l_param1:
         j=0
         for param2 in l_param2:
-            [P1,P2,Z,PO4,Export,u1,u2,g1,g2,arg]=growth_model_2P1Z_v10(Psupply_arr*param1,time,kP1=param2) #A modifier
+            [P1,P2,Z,PO4,Export,u1,u2,g1,g2,arg]=growth_model_2P1Z_v10(Psupply,time,kP1=param1,kP2=param2) #A modifier
             P_1[i,j] = P1[len(P1)-1]
             P_2[i,j] = P2[len(P2)-1]
             ratio[i,j] = P1[len(P1)-1]/(P1[len(P1)-1]+P2[len(P2)-1])
@@ -95,7 +95,7 @@ else:
     
     i=0
     for param1 in l_param1:
-        [P1,P2,Z,PO4,Export,u1,u2,g1,g2,arg]=growth_model_2P1Z_v10(Psupply_arr*param1,time) #A modifier
+        [P1,P2,Z,PO4,Export,u1,u2,g1,g2,arg]=growth_model_2P1Z_v10(Psupply,time,kP1=param1) #A modifier
         P_1[i] = P1[len(P1)-1]
         P_2[i] = P2[len(P2)-1]
         ratio[i] = P1[len(P1)-1]/(P1[len(P1)-1]+P2[len(P2)-1])
@@ -137,24 +137,24 @@ with PdfPages(name_pdf) as pdf:
         # pdf.savefig()
     
         #P1/(P1+P2)
-        plt.figure(3)
-        cmap = plt.cm.get_cmap('Blues')
-        norm = plt.Normalize(vmin=l_param2.min(), vmax=l_param2.max())
-        scalar_map = ScalarMappable(norm=norm, cmap=cmap)
-        for i in range(n2):
-            color_val = scalar_map.to_rgba(l_param2[i])
-            plt.plot(l_param1[0:n2], Var[0:n2,i], color=color_val)
-        for i in range(0,n2):
-            plt.scatter(l_param1[0:n2], Var[0:n2,i], c=P_2[0:n2,i],cmap='Wistia')
-        cb =plt.colorbar()
-        cb.set_label('[P1]')
-        plt.grid()
-        plt.xlabel(name_param1)
-        plt.ylabel('P1/(P1+P2)')
-        L_param2 = [round(num, 2) for num in l_param2]
-        legend = plt.legend(L_param2[0:n2],frameon=True,fontsize=6,loc='center left',bbox_to_anchor=(1.5, 0.5))
-        legend.set_title(name_param2)  
-        pdf.savefig(bbox_inches='tight', pad_inches=0.5)
+        # plt.figure(3)
+        # cmap = plt.cm.get_cmap('Blues')
+        # norm = plt.Normalize(vmin=l_param2.min(), vmax=l_param2.max())
+        # scalar_map = ScalarMappable(norm=norm, cmap=cmap)
+        # for i in range(n2):
+        #     color_val = scalar_map.to_rgba(l_param2[i])
+        #     plt.plot(l_param1[0:n2], Var[0:n2,i], color=color_val)
+        # for i in range(0,n2):
+        #     plt.scatter(l_param1[0:n2], Var[0:n2,i], c=P_2[0:n2,i],cmap='Wistia')
+        # cb =plt.colorbar()
+        # cb.set_label('[P1]')
+        # plt.grid()
+        # plt.xlabel(name_param1)
+        # plt.ylabel('P1/(P1+P2)')
+        # L_param2 = [round(num, 2) for num in l_param2]
+        # legend = plt.legend(L_param2[0:n2],frameon=True,fontsize=6,loc='center left',bbox_to_anchor=(1.5, 0.5))
+        # legend.set_title(name_param2)  
+        # pdf.savefig(bbox_inches='tight', pad_inches=0.5)
         
         #Figure 2 and 3 : P concentration function of param2 vs param1 
         
@@ -180,16 +180,16 @@ with PdfPages(name_pdf) as pdf:
         # plt.clim(0, 1)
         # pdf.savefig()
         
-        # #P1/(P1+P2)
-        # plt.figure(6)
-        # [X,Y] = np.meshgrid(l_param1,l_param2, indexing='ij');
-        # plt.pcolor(X,Y,Var)
-        # plt.xlabel(name_param1)
-        # plt.ylabel(name_param2)
-        # plt.colorbar()
-        # plt.title('P1/(P1+P2)')
-        # plt.clim(0, 1)
-        # pdf.savefig()
+        #P1/(P1+P2)
+        plt.figure(6)
+        [X,Y] = np.meshgrid(l_param1,l_param2, indexing='ij');
+        plt.pcolor(X,Y,Var)
+        plt.xlabel(name_param1)
+        plt.ylabel(name_param2)
+        plt.colorbar()
+        plt.title('P1/(P1+P2)')
+        plt.clim(0, 1)
+        pdf.savefig()
     
     else:
         

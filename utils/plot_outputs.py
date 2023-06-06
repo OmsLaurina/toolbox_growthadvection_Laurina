@@ -29,6 +29,13 @@ time = npy.arange(0,end_time,dt)
 Psupply_moy = 0.01 #0.05 = threshold where P2 became dominant
 #Psupply constant
 Psupply =[Psupply_moy] * len(time)
+#Psupply variable
+#Periodic variability
+# nb_time=len(time)
+# Psupply=[]
+# for i in range(0,nb_time-1):
+#     Psupply_next = Psupply_moy+2*Psupply_moy*np.sin(2*np.pi*i/10)
+#     Psupply.append(Psupply_next)
 
 # Call the function
 from growth_model_2P1Z_v10 import growth_model_2P1Z_v10
