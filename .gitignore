@@ -12,4 +12,5 @@ old_versions/
 utils/cbdate/
 utils/cmocean/
 utils/landmask/
+__pycache__/
 other_scripts/
