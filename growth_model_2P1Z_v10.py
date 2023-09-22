@@ -29,6 +29,10 @@
 """
 
 def growth_model_2P1Z_v10(Psupply,time,**kwargs):
+    print("Current parameter values:")
+    for param_name, param_value in kwargs.items():
+        print(f"  {param_name}: {param_value}")
+    print("Starting calculations...")
     
     global dt, umax1, umax2, gmax1, gmax2, kP1, kP2, kZ, eZ, epsilon, mZ, gamma1, gamma2, u1, u2, g1, g2, PP1, PP2, G1, G2, P1, P2, Z, PO4, P01, P02, Z0, PO40
 
@@ -89,18 +93,18 @@ def growth_model_2P1Z_v10(Psupply,time,**kwargs):
         'umax2':2.7648,   # maximum growth rates of P2 [d^{-1}]
         'gmax1':3.89,     # maximum grazing rates of Z on P1 [d^{-1}]
         'gmax2':0.43,     # maximum grazing rates of Z on P2 [d^{-1}]
-        'kP1':1,#0.1,         # half-saturation constant for P1 on PO4 [mmolC m^{-3}]
-        'kP2':3,#0.3,	      # half-saturation constant for P2 on PO4 [mmolC m^{-3}]
+        'kP1':1,          # half-saturation constant for P1 on PO4 [mmolC m^{-3}]
+        'kP2':3,	      # half-saturation constant for P2 on PO4 [mmolC m^{-3}]
         'kZ1':5,		  # half-saturation constant for Z on P1 [mmolC m^{-3}]
-        'kZ2':5,		  # half-saturation constant for Z on P2 [mmolC m^{-3}]
+        'kZ2':20,		  # half-saturation constant for Z on P2 [mmolC m^{-3}]
         'mP1':0.1,	      # P1 natural mortality rate [d^{-1}]
         'mP2':0.2,	      # P2 natural mortality rate [d^{-1}]
         'm1Z':0.1,	      # Z natural mortality rate [d^{-1}]
         'm2Z':0.061,	  # Z quadratic mortality rate [mmolC^{-1} m^{3} d^{-1}]
-        'gamma':0.7,      # conversion factor from P to Z [/]
+        'gamma':0.6,      # conversion factor from P to Z [/]
         'epsilonP':1,     # fraction of P natural mortality that is available as regenerated PO4 [/]
         'epsilon1Z':0.3,  # fraction of Z natural mortality that is available as regenerated PO4 [/]
-        'epsilon2Z':0.75, # fraction of Z excretion that is available as regenerated PO4 [/]
+        'epsilon2Z':0.7,  # fraction of Z excretion that is available as regenerated PO4 [/]
         'P1_ini':0.6,     # initial biomass of P1 [mmolC m^{-3}]
         'P2_ini':0.1,     # initial biomass of P2 [mmolC m^{-3}]
         'Z_ini':0.6,      # initial biomass of Z [mmolC m^{-3}]
@@ -131,8 +135,8 @@ def growth_model_2P1Z_v10(Psupply,time,**kwargs):
         u2.append(u2next)
         
         # functional response = grazing rates (holling type II)
-        g1next=(P1[t-1]/(arg['kZ1']+P1[t-1]+P2[t-1]))*arg['gmax1']
-        g2next=(P2[t-1]/(arg['kZ2']+P1[t-1]+P2[t-1]))*arg['gmax2']
+        g1next=P1[t-1]/(arg['kZ1']+P1[t-1]+P2[t-1])*arg['gmax1']
+        g2next=P2[t-1]/(arg['kZ2']+P1[t-1]+P2[t-1])*arg['gmax2']
        
         g1.append(g1next)
         g2.append(g2next)
@@ -230,4 +234,4 @@ def growth_model_2P1Z_v10(Psupply,time,**kwargs):
         PO4.append(PO4_next)
         
         
-    return P1,P2,Z,PO4,Export,u1,u2,g1,g2,arg
+    return P1,P2,Z,PO4,arg
